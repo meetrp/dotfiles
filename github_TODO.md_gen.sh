@@ -12,6 +12,7 @@ KEYS="TODO FIXME HACK XXX BUG"
 
 #
 # global constants
+GIT_URL=$(git config --get remote.origin.url | awk -F"\.git" '{print $1}')
 GIT_ROOT=$(git rev-parse --show-toplevel)
 TODO_FILE="${GIT_ROOT}/TODO.md"
 
@@ -58,7 +59,7 @@ do
 			echo "---|---"
 		fi
 
-		echo "**${_lnum}** | ${_text}"
+		echo "[${_lnum}](${GIT_URL}/blob/master/${_current_file}#L${_lnum}) | ${_text}"
 	fi
 done < /tmp/.todo.md
 echo "---"
