@@ -5,4 +5,4 @@ All practice codes, algorithms and few miscellaneous attempts :-)
 A small way to learn but a smart way to retain the knowledge ;-)
 
 	.vimrc - personalized .vimrc file.
-	todo.md.sh - generate TODO.md automatically from the code
+	github_TODO.md_gen.sh - generate TODO.md automatically from the code
