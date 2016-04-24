@@ -40,26 +40,29 @@ echo
 _current_file=''
 while IFS= read -r line
 do
-	_fname=$(echo ${line} | cut -f1 -d':')
-	_lnum=$(echo ${line} | cut -f2 -d':')
-	_text=$(echo ${line} | cut -f3- -d':')
-
-	if [[ ${_fname} != ${_current_file} ]]
+	if [ ! -z "${line}" ]
 	then
-		if [ ${_current_file} ]
-		then
-			echo
-		fi
-		_current_file=${_fname}
-		echo "## ${_current_file}"
-		echo "Line|Content"
-		echo "---|---"
-	fi
+		_fname=$(echo ${line} | cut -f1 -d':')
+		_lnum=$(echo ${line} | cut -f2 -d':')
+		_text=$(echo ${line} | cut -f3- -d':')
 
-	echo "**${_lnum}** | ${_text}"
+		if [ "${_fname}" != "${_current_file}" ]
+		then
+			if [ ! -z "${_current_file}" ]
+			then
+				echo
+			fi
+			_current_file=${_fname}
+			echo "## ${_current_file}"
+			echo "Line|Content"
+			echo "---|---"
+		fi
+
+		echo "**${_lnum}** | ${_text}"
+	fi
 done < /tmp/.todo.md
 echo "---"
-echo "* Generated automatically by [TODO.md_gen.sh](https://github.com/meetrp/generic/blob/master/todo.md.sh)*"
+echo "* Generated automatically by [TODO.md_gen.sh](https://github.com/meetrp/generic/blob/master/github_TODO.md_gen.sh)*"
 echo
 
-$(git add ${TODO_FILE})
+git add ${TODO_FILE}

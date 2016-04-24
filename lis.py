@@ -14,6 +14,8 @@
 # limitations under the License.
 #
 
+# XXX: Testing my todo generated. will remove it later
+
 def clone(s):
     # there are 2 other methods to create a copy of a list
     #   1. new_list = list(old_list)
