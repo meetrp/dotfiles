@@ -9,6 +9,7 @@ fn_check_dependencies() {
 
 	if [ $? -ne 0 ]; then
 		echo "****************** !! \${__cmd}\' IS NOT AVAILABLE !! ******************"
+		echo
 		exit 1
 	fi
 
@@ -43,6 +44,7 @@ fn_load_mod() {
 	${MODPROBE} ${__mod_name}
 	if [ $? -ne 0 ]; then
 		${ECHO} "****************** !! FAILED TO LOAD ${__mod_name} !! ******************"
+		${ECHO}
 		exit 1
 	fi
 }
@@ -88,7 +90,7 @@ fn_create_fw_rules() {
 #
 #--------------------------------- Main
 ${ECHO}
-${ECHO} "======================= Enabling NAT on Ubuntu Linux ======================="
+${ECHO} "======================= Enabling NAT ======================="
 ${ECHO}
 
 WANIF=$(fn_get_wan_iface)
@@ -98,10 +100,30 @@ ${ECHO} "WAN Interface: $WANIF"
 ${ECHO} "LAN Interface: $LANIF"
 ${ECHO}
 
+if [ -z ${WANIF} ]; then
+	${ECHO} "****************** !! WAN interface not found !! ******************"
+	${ECHO}
+	exit 1
+fi
+
+if [ -z ${LANIF} ]; then
+	${ECHO} "****************** !! LAN interface not found !! ******************"
+	${ECHO}
+	exit 1
+fi
+
+if [ ${WAN} = ${LANIF} ]; then
+	${ECHO} "****************** !! Only one interface found !! ******************"
+	${ECHO}
+	exit 1
+fi
+
 ${ECHO} "Setting up network:"
 fn_load_modules
 fn_enable_ipv4_forwarding
 fn_enable_ipv4_dynamic_addr
 fn_clear_previous_fw_rules
 fn_create_fw_rules
+${ECHO}
+${ECHO} "======================= Done ======================="
 ${ECHO}
