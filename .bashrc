@@ -17,6 +17,7 @@ alias la='ls -A'                              # all but . and ..
 
 #alias vim='gvim'
 alias vi='vim'
+alias e='emacs'
 
 # -- Code and related
 alias ct='find | grep "\.c$\|\.h$\|.sh$" | grep -v 'test' > ./cscope.files; cscope -b; ctags -L cscope.files'
@@ -51,6 +52,10 @@ function __version() {
 		local COUNT=$(echo $DESCRIBE | awk '{split($0,a,"-"); print a[2]}')
 		local VER="$TAG (${COMMIT}@$BRANCH)"
 	fi
+
+	if [ -z $COUNT ]; then
+		COUNT="0";
+	fi;
 
 	#
 	# helper variables
@@ -87,6 +92,7 @@ function __version() {
 
 alias b='git branch -vv'
 alias l='git log --pretty=format:"%C(auto)%h ||%C(auto)%d %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n10'
+alias l2='git log --pretty=format:"%C(auto)%h ||%C(auto)%d %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n'
 alias st='git status .'
 alias d='git diff'
 alias a='git add .'
