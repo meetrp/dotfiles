@@ -14,9 +14,11 @@ alias f='find . -iname'
 alias ls='ls -hF --color=tty'
 alias ll='ls -l'                              # long list
 alias la='ls -A'                              # all but . and ..
+alias lt='ll -tr'                             # long list in reverse order
 
 #alias vim='gvim'
 alias vi='vim'
+alias e='emacs'
 
 # -- Code and related
 alias ct='find | grep "\.c$\|\.h$\|.sh$" | grep -v 'test' > ./cscope.files; cscope -b; ctags -L cscope.files'
@@ -52,6 +54,10 @@ function __version() {
 		local VER="$TAG (${COMMIT}@$BRANCH)"
 	fi
 
+	if [ -z $COUNT ]; then
+		COUNT="0";
+	fi;
+
 	#
 	# helper variables
 	local SUFFIX=".$COUNT ($COMMIT)"
@@ -85,8 +91,22 @@ function __version() {
 	echo $VER
 }
 
+function __log() {
+	local __COUNT=$1
+	local __GIT_MIN_VERSION=1.8.3
+	local __GIT_VERSION=$(git --version | awk '{print $3}')
+
+	if [ $(awk 'BEGIN{ print "'$__GIT_VERSION'"<"'$__GIT_MIN_VERSION'" }') -eq 1 ]; then
+		git log --pretty=format:"%C(yellow)%h%C(reset) ||%C(cyan)%d%C(reset) %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n${__COUNT}
+	else
+		git log --pretty=format:"%C(auto)%h ||%C(auto)%d %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n${__COUNT}
+	fi
+}
+
+# -- git commands
 alias b='git branch -vv'
-alias l='git log --pretty=format:"%C(auto)%h ||%C(auto)%d %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n10'
+alias l='__log 10'
+alias l2='__log'
 alias st='git status .'
 alias d='git diff'
 alias a='git add .'
@@ -98,6 +118,7 @@ alias p='git pull'
 alias ref='git reflog'
 alias t='git tag -l -n1'
 alias ft='git fetch'
+alias show='git show --name-only'
 
 # -- git completion
 if [ -f /etc/bash_completion.d/git-flow-completion.bash ]; then
@@ -117,6 +138,10 @@ if [ -f ~/.bash-git-prompt/gitprompt.sh ]; then
 	GIT_PROMPT_THEME=TruncatedPwd_WindowTitle # use theme optimized for solarized color scheme
 	source ~/.bash-git-prompt/gitprompt.sh
 fi
+
+# -- lxc
+alias llc='sudo lxc-console -n'
+alias lls='sudo lxc-ls -f'
 
 
 # -- projects
