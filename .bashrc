@@ -95,9 +95,22 @@ function __version() {
 	echo $VER
 }
 
+function __log() {
+	local __COUNT=$1
+	local __GIT_MIN_VERSION=1.8.3
+	local __GIT_VERSION=$(git --version | awk '{print $3}')
+
+	if [ $(awk 'BEGIN{ print "'$__GIT_VERSION'"<"'$__GIT_MIN_VERSION'" }') -eq 1 ]; then
+		git log --pretty=format:"%C(yellow)%h%C(reset) ||%C(cyan)%d%C(reset) %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n${__COUNT}
+	else
+		git log --pretty=format:"%C(auto)%h ||%C(auto)%d %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n${__COUNT}
+	fi
+}
+
+
 alias b='git branch -vv'
-alias l='git log --pretty=format:"%C(auto)%h ||%C(auto)%d %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n10'
-alias l2='git log --pretty=format:"%C(auto)%h ||%C(auto)%d %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n'
+alias l='__log 10'
+alias l2='__log 20'
 alias st='git status .'
 alias d='git diff'
 alias a='git add .'
