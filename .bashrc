@@ -2,7 +2,12 @@
 # My Changes
 
 # -- Common
+if [ $(id -u) -eq 0 ]; then
+PS1="\[\033[36m\][ \d \t ] \[\033[32m\]\[\e[30;43m\]\u\[\e[m\]@\H:\[\033[33m\]\$PWD\n\[\033[00m\]$> "
+else
 PS1="\[\033[36m\][ \d \t ] \[\033[32m\]\u@\H:\[\033[33m\]\w\n\[\033[00m\]$> "
+fi
+
 
 alias s='source ~/.bashrc'
 
