@@ -19,6 +19,7 @@ alias f='find . -iname'
 alias ls='ls -hF --color=tty'
 alias ll='ls -l'                              # long list
 alias la='ls -A'                              # all but . and ..
+alias lt='ll -tr'                             # long list in reverse order
 
 #alias vim='gvim'
 alias vi='vim'
@@ -107,10 +108,10 @@ function __log() {
 	fi
 }
 
-
+# -- git commands
 alias b='git branch -vv'
 alias l='__log 10'
-alias l2='__log 20'
+alias l2='__log'
 alias st='git status .'
 alias d='git diff'
 alias a='git add .'
@@ -122,6 +123,7 @@ alias p='git pull'
 alias ref='git reflog'
 alias t='git tag -l -n1'
 alias ft='git fetch'
+alias show='git show --name-status'
 
 # -- git completion
 if [ -f /etc/bash_completion.d/git-flow-completion.bash ]; then
@@ -141,6 +143,10 @@ if [ -f ~/.bash-git-prompt/gitprompt.sh ]; then
 	GIT_PROMPT_THEME=TruncatedPwd_WindowTitle # use theme optimized for solarized color scheme
 	source ~/.bash-git-prompt/gitprompt.sh
 fi
+
+# -- lxc
+alias llc='sudo lxc-console -n'
+alias lls='sudo lxc-ls -f'
 
 
 # -- projects
