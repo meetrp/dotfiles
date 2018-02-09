@@ -123,7 +123,7 @@ alias p='git pull'
 alias ref='git reflog'
 alias t='git tag -l -n1'
 alias ft='git fetch'
-alias show='git show --name-only'
+alias show='git show --name-status'
 
 # -- git completion
 if [ -f /etc/bash_completion.d/git-flow-completion.bash ]; then
