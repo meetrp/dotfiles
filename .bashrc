@@ -2,12 +2,77 @@
 # My Changes
 
 # -- Common
-if [ $(id -u) -eq 0 ]; then
-PS1="\[\033[36m\][ \d \t ] \[\033[32m\]\[\e[30;43m\]\u\[\e[m\]@\H:\[\033[33m\]\$PWD\n\[\033[00m\]$> "
-else
-PS1="\[\033[36m\][ \d \t ] \[\033[32m\]\u@\H:\[\033[33m\]\w\n\[\033[00m\]$> "
-fi
+function __prompt() {
+	local __MACHINE_TYPE=""
+	local __DATE_TIME=""
+	local __HOST_NAME=""
+	local __LOGIN=""
+	local __PATH=""
+	local __PROMPT=""
+	local __USER=""
 
+	__USER=$(echo $SUDO_USER)
+	if [ -z $__USER ]; then
+		__USER="$(logname 2> /dev/null)"
+		if [ -z $__USER ]; then
+			__USER="\u"
+		fi
+	fi
+
+	local __SYS_TYPE=$(systemd-detect-virt 2> /dev/null)
+	if [ ! -z $__SYS_TYPE ]; then
+
+		if [ $__SYS_TYPE != "none" ]; then
+
+			local __BLINK="\e[5m\e[1m"
+			local __TYPE="$__SYS_TYPE"
+
+			case $__SYS_TYPE in
+				"oracle" )
+					__TYPE="VirtualBox"
+					;;
+				"vmware" )
+					__TYPE="VMware"
+					;;
+				"qemu" )
+					__TYPE="~ QEMU ~"
+					;;
+				"kvm" )
+					__TYPE="~ KVM ~"
+					;;
+				"xen" )
+					__TYPE="~ XEN ~"
+					;;
+				"docker" )
+					__TYPE="DOCKER"
+					;;
+				"lxc" )
+					__TYPE="~ LXC ~"
+					;;
+			esac
+
+			__MACHINE_TYPE="$__BLINK\[\033[047m\]\[\033[030m\] $__TYPE \e[0m "
+		else
+				__MACHINE_TYPE=""
+		fi
+	fi
+
+	if [ $(id -u) -eq 0 ]; then
+		# root
+		__LOGIN=" \[\033[32m\]\[\e[30;43m\]$__USER\[\e[m\]@\H"
+		__PATH="\[\033[33m\]\$PWD"
+		__PROMPT="\[\033[31m\]ROOT# \[\033[00m\]"
+	else
+		__LOGIN=" \[\033[32m\]$__USER@\H"
+		__PATH="\[\033[33m\]\w"
+		__PROMPT="\[\033[00m\]$> "
+	fi
+
+	__DATE_TIME="\[\033[36m\][ \d \t ]"
+	echo "$__MACHINE_TYPE$__DATE_TIME$__LOGIN:$__PATH\n$__PROMPT"
+}
+
+PS1=$(__prompt)
 
 alias s='source ~/.bashrc'
 
