@@ -34,7 +34,8 @@ function __prompt() {
 
 		if [ $__SYS_TYPE != "none" ]; then
 
-			local __BLINK="\e[5m\e[1m"
+			local __BLINK="\e[5m"
+			local __BOLD="\e[1m"
 			local __TYPE="$__SYS_TYPE"
 
 			case $__SYS_TYPE in
@@ -61,7 +62,7 @@ function __prompt() {
 					;;
 			esac
 
-			__MACHINE_TYPE="$__BLINK\[\033[047m\]\[\033[030m\] $__TYPE \e[0m "
+			__MACHINE_TYPE="$__BOLD\[\033[047m\]\[\033[030m\] $__TYPE \e[0m "
 		else
 				__MACHINE_TYPE=""
 		fi
