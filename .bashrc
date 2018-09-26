@@ -183,6 +183,23 @@ function __set_generic_aliases() {
 }
 
 function __set_generic_options() {
+	case "$__OS" in
+		"MAC")
+			if [ -f $(brew --prefix)/etc/bash_completion ]; then
+				# homebrew usecase
+				source $(brew --prefix)/etc/bash_completion
+			elif [ -f $(brew --prefix)/etc/profile.d/bash_completion.sh ]; then
+				# macport usecase
+				source $(brew --prefix)/etc/profile.d/bash_completion.sh
+			fi
+			;;
+		"LINUX")
+			if [ -f /etc/bash_completion ]; then
+				source /etc/bash_completion
+			fi
+			;;
+	esac
+
 	set completion-ignore-case On
 
 	export EDITOR='vi'
@@ -232,7 +249,7 @@ function __set_clang_aliases() {
 
 	case "$__OS" in
 		"MAC")
-			alias ctags="`brew --prefix`/bin/ctags"
+			alias ctags="$(brew --prefix)/bin/ctags"
 			alias ct='find . | grep -e "\.c$" -e "\.h$" -e "\.sh$" | grep -v 'test' > ./cscope.files; cscope -b; ctags -L cscope.files'
 			alias cs='find . | grep -e "\.c$" -e "\.h$" -e "\.sh$" | grep -v 'test' > ./cscope.files; cscope -b; ctags -L cscope.files; cscope'
 			;;
@@ -265,11 +282,28 @@ function __set_git_aliases() {
 	alias show='git show --name-status'
 }
 
-function __set_git_flow_completion() {
-	# -- git completion
-	if [ -f /etc/bash_completion.d/git-flow-completion.bash ]; then
-		source /etc/bash_completion.d/git-flow-completion.bash
-	fi
+function __set_git_completions() {
+	case "$__OS" in
+		"MAC")
+			# -- git completion
+			if [ -f $(brew --prefix)/git/contrib/completion/git-completion.bash ]; then
+				source $(brew --prefix)/git/contrib/completion/git-completion.bash
+			elif [ -f $(brew --prefix)/etc/bash_completion.d/git-completion.bash ]; then
+				source $(brew --prefix)/etc/bash_completion.d/git-completion.bash
+			fi
+
+			# -- git flow completion
+			if [ -f $(brew --prefix)/etc/bash_completion.d/git-flow-completion.bash ]; then
+				source $(brew --prefix)/etc/bash_completion.d/git-flow-completion.bash
+			fi
+			;;
+		"LINUX")
+			# -- git flow completion
+			if [ -f /etc/bash_completion.d/git-flow-completion.bash ]; then
+				source /etc/bash_completion.d/git-flow-completion.bash
+			fi
+			;;
+	esac
 }
 
 function __set_git_prompt() {
@@ -318,7 +352,7 @@ __set_clang_aliases
 
 # source control prefs
 __set_git_aliases
-__set_git_flow_completion
+__set_git_completions
 __set_git_prompt
 
 # advanced prefs
