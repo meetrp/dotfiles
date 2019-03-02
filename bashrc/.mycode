@@ -1,0 +1,72 @@
+##
+# Code related artifacts
+#
+# All the code related functions and variables required for the bashrc to
+# function properly are being defined in here.
+#
+# @author       Rp <rp@meetrp.com>
+# @category     Shell script
+# @package      bashrc
+# @date         1/Mar/2019
+# @license      <<Check LICENSE file for details>>
+##
+
+function __set_editor_aliases() {
+	$(gvim -h > /dev/null 2> /dev/null) 
+	if [ $? -eq 0 ]; then
+		alias vim='gvim'
+	fi
+
+	$(vim -h > /dev/null 2> /dev/null) 
+	if [ $? -eq 0 ]; then
+		alias vi='vim'
+	fi
+
+	$(emacs --version > /dev/null 2> /dev/null) 
+	if [ $? -eq 0 ]; then
+		alias e='emacs'
+	fi
+}
+
+# -- Code and related
+function __set_clang_aliases() {
+	ctags --version > /dev/null 2> /dev/null
+	if [ $? -ne 0 ]; then
+		return
+	fi
+
+	cscope --version > /dev/null 2> /dev/null
+	if [ $? -ne 0 ]; then
+		return
+	fi
+
+	case "$__OS" in
+		"MAC")
+			alias ctags="$(brew --prefix)/bin/ctags"
+			alias ct='find . | grep -e "\.c$" -e "\.h$" -e "\.sh$" | grep -v 'test' > ./cscope.files; cscope -b; ctags -L cscope.files'
+			alias cs='find . | grep -e "\.c$" -e "\.h$" -e "\.sh$" | grep -v 'test' > ./cscope.files; cscope -b; ctags -L cscope.files; cscope'
+			;;
+		"LINUX")
+			alias ct='find | grep "\.c$\|\.h$\|.sh$" | grep -v 'test' > ./cscope.files; cscope -b; ctags -L cscope.files'
+			alias cs='find | grep "\.c$\|\.h$\|.sh$" | grep -v 'test' > ./cscope.files; cscope -b; ctags -L cscope.files; cscope'
+			;;
+	esac
+	export CSCOPE_EDITOR="vim"
+
+	alias mc='make clean'
+	alias mcm='make clean; make'
+}
+
+function __set_container_aliases() {
+	case "$__OS" in
+		"LINUX")
+			alias llc='sudo lxc-console -n'
+			alias lls='sudo lxc-ls -f'
+			;;
+	esac
+}
+
+# -- projects
+function __set_project_aliases() {
+	alias hub='cd /home/rp/code/github'
+}
