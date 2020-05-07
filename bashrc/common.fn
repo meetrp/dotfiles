@@ -1,0 +1,24 @@
+##
+# Common artifacts used by bashrc script
+#
+# All the common functions and variables required for the bashrc to function
+# properly are being defined in here.
+#
+# @author       Rp <rp@meetrp.com>
+# @category     Shell script
+# @package      bashrc
+# @date         1/Mar/2019
+# @license      <<Check LICENSE file for details>>
+##
+
+# -- variables
+__OS=""
+
+
+# -- functions
+function __find_os_type() {
+	case "$OSTYPE" in
+		darwin*) __OS="MAC" ;;
+		linux*) __OS="LINUX" ;;
+	esac
+}

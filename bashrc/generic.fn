@@ -1,0 +1,137 @@
+##
+# Generic artifacts
+#
+# All the generic functions and variables required for the bashrc to
+# function properly are being defined in here.
+#
+# @author       Rp <rp@meetrp.com>
+# @category     Shell script
+# @package      bashrc
+# @date         1/Mar/2019
+# @license      <<Check LICENSE file for details>>
+##
+
+function __prompt() {
+	local __MACHINE_TYPE=""
+	local __DATE_TIME=""
+	local __HOST_NAME=""
+	local __LOGIN=""
+	local __PATH=""
+	local __PROMPT=""
+	local __USER=""
+
+	__USER=$(echo $SUDO_USER)
+	if [ -z $__USER ]; then
+		__USER="$(logname 2> /dev/null)"
+		if [ -z $__USER ]; then
+			__USER="\u"
+		fi
+	fi
+
+	local __SYS_TYPE=$(systemd-detect-virt 2> /dev/null)
+	if [ ! -z $__SYS_TYPE ]; then
+
+		if [ $__SYS_TYPE != "none" ]; then
+
+			local __BLINK="\e[5m"
+			local __BOLD="\e[1m"
+			local __TYPE="$__SYS_TYPE"
+
+			case $__SYS_TYPE in
+				"oracle" )
+					__TYPE="VirtualBox"
+					;;
+				"vmware" )
+					__TYPE="VMware"
+					;;
+				"qemu" )
+					__TYPE="~ QEMU ~"
+					;;
+				"kvm" )
+					__TYPE="~ KVM ~"
+					;;
+				"xen" )
+					__TYPE="~ XEN ~"
+					;;
+				"docker" )
+					__TYPE="DOCKER"
+					;;
+				"lxc" )
+					__TYPE="~ LXC ~"
+					;;
+			esac
+
+			__MACHINE_TYPE="$__BOLD\[\033[047m\]\[\033[030m\] $__TYPE \e[0m "
+		else
+				__MACHINE_TYPE=""
+		fi
+	fi
+
+	if [ $(id -u) -eq 0 ]; then
+		# root
+		__LOGIN=" \[\033[32m\]\[\e[30;43m\]$__USER\[\e[m\]@\H"
+		__PATH="\[\033[33m\]\$PWD"
+		__PROMPT="\[\033[31m\]ROOT# \[\033[00m\]"
+	else
+		__LOGIN=" \[\033[32m\]$__USER@\H"
+		__PATH="\[\033[33m\]\w"
+		__PROMPT="\[\033[00m\]$> "
+	fi
+
+	__DATE_TIME="\[\033[36m\][ \d \t ]"
+	echo "$__MACHINE_TYPE$__DATE_TIME$__LOGIN:$__PATH\n$__PROMPT"
+}
+
+# -- set functions
+function __set_prompt() {
+	PS1=$(__prompt)
+}
+
+function __set_generic_aliases() {
+	if [ -f ~/.bashrc ]; then
+		alias s='source ~/.bashrc'
+	fi
+
+	alias ..='cd ..'
+	alias grep='grep --color'                     # show differences in colour
+	alias g='grep -rIin'
+	alias f='find . -iname'
+
+	alias pg='ping -c 5 www.google.com'
+}
+
+function __set_generic_options() {
+	case "$__OS" in
+		"MAC")
+			if [ -f $(brew --prefix)/etc/bash_completion ]; then
+				# homebrew usecase
+				source $(brew --prefix)/etc/bash_completion
+			elif [ -f $(brew --prefix)/etc/profile.d/bash_completion.sh ]; then
+				# macport usecase
+				source $(brew --prefix)/etc/profile.d/bash_completion.sh
+			fi
+			;;
+		"LINUX")
+			if [ -f /etc/bash_completion ]; then
+				source /etc/bash_completion
+			fi
+			;;
+	esac
+
+	set completion-ignore-case On
+
+	export EDITOR='vi'
+
+	export GIT_EDITOR='vi'
+	export HISTCONTROL=ignoredups
+}
+
+function __set_ls_aliases() {
+	case "$__OS" in
+		"MAC") alias ls='ls -hF -G' ;;
+		"LINUX") alias ls='ls -hF --color=tty' ;;
+	esac
+	alias ll='ls -l'                              # long list
+	alias la='ls -A'                              # all but . and ..
+	alias lt='ll -tr'                             # long list in reverse order
+}
