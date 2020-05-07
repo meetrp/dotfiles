@@ -84,10 +84,11 @@ function __git_log() {
 		"LINUX") __AWK="awk" ;;
 	esac
 
+	local __DEV_INFO=" || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset) || %C(blue)[%GS]%C(reset)"
 	if [ $(${__AWK} 'BEGIN{ print "'$__GIT_VERSION'"<"'$__GIT_MIN_VERSION'" }') -eq 1 ]; then
-		git log --pretty=format:"%C(yellow)%h%C(reset) ||%C(cyan)%d%C(reset) %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n${__COUNT}
+		git log --pretty=format:"%C(yellow)%h%C(reset) ||%C(cyan)%d%C(reset) %s ${__DEV_INFO}" --graph --date=short --decorate -n${__COUNT}
 	else
-		git log --pretty=format:"%C(auto)%h ||%C(auto)%d %s || %C(blue)%an%C(reset) on %C(green)%ad%C(reset)%C(red)(%ar)%C(reset)" --graph --date=short --decorate -n${__COUNT}
+		git log --pretty=format:"%C(auto)%h ||%C(auto)%d %s ${__DEV_INFO}" --graph --date=short --decorate -n${__COUNT}
 	fi
 }
 
@@ -106,7 +107,7 @@ function __set_git_aliases() {
 	alias ref='git reflog'
 	alias t='git tag -l -n1'
 	alias ft='git fetch'
-	alias show='git show --name-status'
+	alias show='git show --name-status --show-signature'
 	alias gp='git branch -vv | grep ": gone]"|  grep -v "\*" | awk "{ print $1; }" | xargs -r git branch -d'
 	alias gt='git fetch --prune-tags'
 }
