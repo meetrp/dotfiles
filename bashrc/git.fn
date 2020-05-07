@@ -107,6 +107,8 @@ function __set_git_aliases() {
 	alias t='git tag -l -n1'
 	alias ft='git fetch'
 	alias show='git show --name-status'
+	alias gp='git branch -vv | grep ": gone]"|  grep -v "\*" | awk "{ print $1; }" | xargs -r git branch -d'
+	alias gt='git fetch --prune-tags'
 }
 
 function __set_git_completions() {
