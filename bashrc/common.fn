@@ -15,10 +15,36 @@
 __OS=""
 
 
-# -- functions
+# -- find the os type
 function __find_os_type() {
 	case "$OSTYPE" in
 		darwin*) __OS="MAC" ;;
 		linux*) __OS="LINUX" ;;
 	esac
+}
+
+# download the github's web gpg
+function __download_github_web_gpg() {
+	if [ -f $HOME/.ssh/web-flow.gpg ]; then
+		return
+	fi
+
+	wget --version > /dev/null 2> /dev/null
+	if [ $? -ne 0 ]; then
+		return
+	fi
+
+	wget --directory-prefix=$HOME/.ssh/ https://github.com/web-flow.gpg
+}
+
+# import all the gpg keys
+function __import_gpg_keys() {
+	gpg --import $HOME/.ssh/web-flow.gpg > /dev/null 2> /dev/null
+	gpg --import $HOME/.ssh/github_private.key > /dev/null 2> /dev/null
+	gpg --import $HOME/.ssh/github_public.key > /dev/null 2> /dev/null
+}
+
+# start the ssh agent
+function __start_ssh_agent() {
+	[[ $(ps aux | grep ssh-agent | grep -v grep) ]] || $(eval ssh-agent -s) > /dev/null 2> /dev/null
 }
