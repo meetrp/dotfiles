@@ -30,6 +30,7 @@ __set_ls_aliases
 # language prefs
 __set_editor_aliases
 __set_clang_aliases
+__set_make_aliases
 
 # source control prefs
 __set_git_aliases
