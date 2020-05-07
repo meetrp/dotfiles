@@ -52,7 +52,9 @@ function __set_clang_aliases() {
 			;;
 	esac
 	export CSCOPE_EDITOR="vim"
+}
 
+function __set_make_aliases() {
 	alias mc='make clean'
 	alias mcm='make clean; make'
 }
