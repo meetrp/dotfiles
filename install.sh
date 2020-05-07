@@ -19,11 +19,14 @@ HOME_VIMRC="${HOME}/.vimrc"
 
 # cleanup dotfiles
 echo "Cleaning up dotfiles: ${HOME_DOTFILES_DIR}"
-rm -rf ${HOME_DOTFILES_DIR}
+rm -rf ${HOME_DOTFILES_DIR}/${BASHRC_DIR}
+rm -rf ${HOME_DOTFILES_DIR}/my.vimrc
+rm -rf ${HOME_DOTFILES_DIR}/my.emacs
+rm -rf ${HOME_DOTFILES_DIR}/git-commit-template.txt
 
 # install dotfiles
 echo "Installing dotfiles: ${HOME_DOTFILES_DIR}"
-mkdir ${HOME_DOTFILES_DIR}
+mkdir -p ${HOME_DOTFILES_DIR}
 cp -R ${REPO_BASHRC_DIR} ${HOME_DOTFILES_DIR}/
 cp -R ${PWD}/my.vimrc ${HOME_DOTFILES_DIR}/
 cp -R ${PWD}/my.emacs ${HOME_DOTFILES_DIR}/
