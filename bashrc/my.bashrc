@@ -13,10 +13,10 @@
 ##
 
 # -- includes
-source .mycommon
-source .mygeneric
-source .mycode
-source .mygit
+. ${HOME_DOTFILES_DIR}/common.fn
+. ${HOME_DOTFILES_DIR}/generic.fn
+. ${HOME_DOTFILES_DIR}/code.fn
+. ${HOME_DOTFILES_DIR}/git.fn
 
 # -- final section
 __find_os_type
