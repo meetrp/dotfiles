@@ -41,5 +41,10 @@ __set_git_prompt
 __set_container_aliases
 __set_project_aliases
 
+# gpg installations
+__download_github_web_gpg
+__import_gpg_keys
+__start_ssh_agent
+
 # All the last ;-)
 screenfetch
