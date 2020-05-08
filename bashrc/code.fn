@@ -70,5 +70,5 @@ function __set_container_aliases() {
 
 # -- projects
 function __set_project_aliases() {
-	alias hub='cd /home/rp/Code/Personal'
+	alias hub='cd $HOME/Code/Personal'
 }

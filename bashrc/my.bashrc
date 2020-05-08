@@ -35,6 +35,7 @@ __set_make_aliases
 # source control prefs
 __set_git_aliases
 __set_git_completions
+__download_dependent_git_packages
 __set_git_prompt
 
 # advanced prefs

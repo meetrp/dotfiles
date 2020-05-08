@@ -9,13 +9,17 @@
 # @license      <<Check LICENSE file for details>>
 ##
 
+# Default file paths
+HOME_BASHRC="${HOME}/.bashrc"
+HOME_VIMRC="${HOME}/.vimrc"
+HOME_BASHPROFILE="${HOME}/.bash_profile"
+
+# My paths
 BASHRC_DIR="bashrc"
 REPO_BASHRC_DIR="${PWD}/${BASHRC_DIR}"
 HOME_DOTFILES_DIR="${HOME}/.dotfiles"
 MY_BASHRC="${HOME_DOTFILES_DIR}/${BASHRC_DIR}/my.bashrc"
 MY_VIMRC="${HOME_DOTFILES_DIR}/my.vimrc"
-HOME_BASHRC="${HOME}/.bashrc"
-HOME_VIMRC="${HOME}/.vimrc"
 
 # cleanup dotfiles
 echo "Cleaning up dotfiles: ${HOME_DOTFILES_DIR}"
@@ -34,8 +38,14 @@ cp -R ${PWD}/git-commit-template.txt ${HOME_DOTFILES_DIR}/
 
 # install bashrc
 echo "Updating .bashrc"
-grep -q "HOME_DOTFILES_DIR" ${HOME_BASHRC} || echo 'export HOME_DOTFILES_DIR="${HOME}/.dotfiles/bashrc/"' >> ${HOME_BASHRC}
-grep -q ${MY_BASHRC} ${HOME_BASHRC} || echo ". ${MY_BASHRC}" >> ${HOME_BASHRC}
+[[ -f ${HOME_BASHRC} ]] && grep -q "HOME_DOTFILES_DIR" ${HOME_BASHRC} || echo 'export HOME_DOTFILES_DIR="${HOME}/.dotfiles/bashrc/"' >> ${HOME_BASHRC}
+[[ -f ${HOME_BASHRC} ]] && grep -q ${MY_BASHRC} ${HOME_BASHRC} || echo ". ${MY_BASHRC}" >> ${HOME_BASHRC}
+
+# if MAC then additionally install bashprofile
+if [[ ${OSTYPE} = darwin* ]]; then
+    echo "Updaing .bash_profile"
+    [[ -f ${HOME_BASHPROFILE} ]] && grep -q ${HOME_BASHRC} ${HOME_BASHPROFILE} || echo ". ${HOME_BASHRC}" >> ${HOME_BASHPROFILE}
+fi
 
 # install vimrc
 echo "Updating .vimrc"
